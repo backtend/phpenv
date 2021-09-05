@@ -1,0 +1,36 @@
+{
+  "name": "backtend/phpenv",
+  "description": "A PHP Environment Adapter",
+  "license": "Apache-2.0",
+  "type": "library",
+  "authors": [
+    {
+      "name": "backtend",
+      "email": "backtend@gmail.com"
+    }
+  ],
+  "keywords": [
+    "phpenv",
+    "environ",
+    "extension"
+  ],
+  "require": {
+    "php": "^7.0 || ^8.0"
+  },
+  "require-dev": {
+  },
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "backtend\\phpenv\\": "src/"
+    },
+    "files": [
+      "src/helper.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "backtend\\phpenv\\": "tests/"
+    }
+  }
+}
