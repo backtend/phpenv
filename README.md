@@ -15,3 +15,8 @@ Environ::isOffline();
 Environ::isProd();
 Environ::isDev();
 ```
+
+
+```
+environ('APP_DEBUG');
+```
