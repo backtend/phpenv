@@ -81,14 +81,15 @@ class Environ
                     self::$_data[$key] = $val;
                 }
             }
-        }
-
-        $envTags = ['APP_ENV', 'APP_ENVIRON'];//若存在则以最后的为准
-        foreach ($envTags as $envTag) {
-            if (isset(self::$_data[$envTag]) and self::$_data[$envTag]) {
-                self::$_env = self::$_data[$envTag];
+            
+            $envTags = ['APP_ENV', 'APP_ENVIRON'];//若存在则以最后的为准
+            foreach ($envTags as $envTag) {
+                if (isset(self::$_data[$envTag]) and self::$_data[$envTag]) {
+                    self::$_env = self::$_data[$envTag];
+                }
             }
         }
+
         self::$_env = self::$_env ?: 'dev';//无.env文件或配置默认为dev环境
 
         if (!in_array(self::$_env, self::all())) {
