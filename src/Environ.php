@@ -83,15 +83,16 @@ class Environ
             }
         }
 
-        if (!isset(self::$_data['APP_ENVIRON']) or !self::$_data['APP_ENVIRON']) {
-            //throw new \Exception('APP ENVIRON NOT SET');
-            self::$_data['APP_ENVIRON'] = 'dev';//无.env文件默认为dev环境
+        $envTags = ['APP_ENV', 'APP_ENVIRON'];//若存在则以最后的为准
+        foreach ($envTags as $envTag) {
+            if (isset(self::$_data[$envTag]) and self::$_data[$envTag]) {
+                self::$_env = self::$_data[$envTag];
+            }
         }
-
-        self::$_env = self::$_data['APP_ENVIRON'];
+        self::$_env = self::$_env ?: 'dev';//无.env文件或配置默认为dev环境
 
         if (!in_array(self::$_env, self::all())) {
-            throw new \Exception('wrong environ set');
+            throw new \Exception('environ must in:' . implode(',', self::all()));
         }
     }
 
