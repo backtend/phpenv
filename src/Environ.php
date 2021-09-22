@@ -48,10 +48,30 @@ class Environ
         // 加载环境变量
         $envFile = $rootPath . '.env';
 
-        if (is_file($envFile)) {
-            $env = parse_ini_file($envFile, true) ?: [];
-            $env = array_change_key_case($env, CASE_UPPER);
 
+        if (is_file($envFile)) {
+            //$env = parse_ini_file($envFile, true) ?: [];
+            $iniString = file_get_contents($envFile) . "\r";
+            $iniSeeds = ['null' => null, 'empty' => '', 'true' => true, 'false' => false];
+            $prefixReplace = sprintf('tmp_environ_%s_', uniqid());
+            foreach ($iniSeeds as $k => $v) {
+                //$iniString = preg_replace("/=\s?\($k\)\r/i", "=$v\r", $iniString);
+                $iniString = preg_replace("/=\s*\(?$k\)?\r/i", "=$prefixReplace$k\r", $iniString);
+            }
+            $env = parse_ini_string($iniString, true) ?: [];
+            $seedTmp = [];
+            foreach ($iniSeeds as $k => $v) {
+                $seedTmp[$prefixReplace . $k] = $v;
+            }
+            $env = array_change_key_case($env, CASE_UPPER);
+            $env = array_map(function ($v1) use ($seedTmp) {
+                if (is_array($v1)) {
+                    return array_map(function ($v2) use ($seedTmp) {
+                        return (current(array_keys($seedTmp)) === $v2 or isset($seedTmp[$v2])) ? $seedTmp[$v2] : $v2;
+                    }, $v1);
+                }
+                return (current(array_keys($seedTmp)) === $v1 or isset($seedTmp[$v1])) ? $seedTmp[$v1] : $v1;
+            }, $env);
             foreach ($env as $key => $val) {
                 if (is_array($val)) {
                     foreach ($val as $k => $v) {
