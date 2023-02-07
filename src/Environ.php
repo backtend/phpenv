@@ -270,4 +270,15 @@ class Environ
     }
 
 
+    /**
+     * 生产环境取值
+     * @param $prodValue 生产环境取值
+     * @param $elseValue 非生产环境取值
+     * @return mixed
+     */
+    public static function prod($prodValue, $elseValue)
+    {
+        return static::isProd() ? $prodValue : $elseValue;
+    }
+
 }
